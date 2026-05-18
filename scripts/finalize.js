@@ -74,7 +74,7 @@ async function main() {
       if (name.includes("closing")) {
         await execFileP("magick", [
           file, CLOSING_PHONE,
-          "-gravity", "center", "-geometry", "+165-30", "-composite",
+          "-gravity", "center", "-geometry", "+150+70", "-composite",
           file
         ]);
         await execFileP("magick", [

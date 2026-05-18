@@ -165,14 +165,14 @@ function buildPrompt(slide, plan, total) {
   if (slide.kind === "closing") {
     lines.push(
       "CLOSING SLIDE — render it in the SAME category visual style as the other",
-      "slides (this carousel's style). Draw ONLY: a short closing headline near",
-      "the TOP, and Himel in his pose on the LEFT side. Fill the rest with the",
-      "category's plain styled background.",
+      "slides (this carousel's style). Draw ONLY: a short closing headline kept",
+      "entirely within the TOP ~230px band, and Himel in his pose at the BOTTOM-",
+      "LEFT. Fill the rest with the category's plain styled background.",
       "DO NOT draw a phone, a phone mockup, a logo, the iB mark, the word",
-      "'Ibils', or any store badge. Leave the CENTRE-RIGHT area and the BOTTOM",
-      "~190px as plain empty background — a phone mockup and the download badges",
-      "are composited there afterwards. If you draw a phone or logo, the slide",
-      "is rejected."
+      "'Ibils', or any store badge. The centre / centre-right and the bottom",
+      "~190px MUST stay plain empty background — a phone mockup and the download",
+      "badges are composited there afterwards. If you draw a phone or logo, or",
+      "let the headline run below the top band, the slide is rejected."
     );
   }
   lines.push(

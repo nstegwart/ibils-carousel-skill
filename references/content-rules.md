@@ -129,7 +129,7 @@ The content plan codex writes (before image generation) is JSON:
   "slides": [
     { "kind": "cover",   "brief": "HEADLINE: \"...\"", "pose": "..." },
     { "kind": "content", "brief": "LAYOUT: statement. HEADLINE: \"...\". BODY: \"...\"", "pose": "..." },
-    { "kind": "closing", "brief": "HEADLINE: \"...\". SUBTEXT: \"...\"", "pose": "..." }
+    { "kind": "closing", "brief": "HEADLINE: \"...\"", "pose": "..." }
   ]
 }
 ```
