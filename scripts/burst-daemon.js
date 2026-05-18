@@ -25,9 +25,14 @@ const WORKDIR = path.resolve(process.argv[2] || path.join(os.homedir(), "ibils-b
 const LEDGER = path.join(WORKDIR, "topics-ledger.jsonl");
 const STOP = path.join(WORKDIR, "STOP");
 
+// One full carousel costs ~17 codex calls (1 plan + ~16 image-gens) and
+// image-gen burns account quota fast. 4x50=200 concurrent carousels drained
+// the ~106-account pool in ~1h (75% rate-limited, ~89% of gens failing).
+// 4x12=48 concurrent keeps quota burn near the replenish rate so the burst
+// stays productive instead of sawtoothing between exhaustion and resets.
 const BATCHES = 4;
-const SESSIONS_PER_BATCH = 50;
-const TOPUP_AT = 20;          // relaunch a batch when <=20 sessions remain
+const SESSIONS_PER_BATCH = 12;
+const TOPUP_AT = 4;           // relaunch a batch when <=4 sessions remain
 const MODES = ["news", "education", "marketing", "insight"];
 
 let modeCursor = 0;
