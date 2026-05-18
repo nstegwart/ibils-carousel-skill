@@ -87,8 +87,8 @@ character, broken anatomy). `references/styles.md` documents the prompt blocks;
 
 Run `node scripts/finalize.js <outdir>/slides`. This pads every slide to an
 exact 1080x1350 4:5 frame (no content cropped) and composites the fixed
-glass-card logo into the TOP-RIGHT corner — uniform, brand-consistent output.
-The closing slide is left as-is (already the finished fixed card).
+glass-card logo into the TOP-RIGHT corner. On the closing slide it also
+composites the Play Store / App Store badges along the bottom strip.
 
 ### 6. Verify before reporting
 
@@ -121,8 +121,8 @@ fails so the user can regenerate just that one.
 - `assets/himel-pose-*.png` — 4 Himel identity references.
 - `assets/ibils-logo-card.png` — the glass-card logo, composited top-right on
   every slide.
-- `assets/closing-card.png` — the FIXED closing brand card (Himel + phone +
-  real Ibils splash); copied in as the last slide, never generated.
+- `assets/store-badges.png` — Play Store + App Store badges, composited along
+  the bottom of the closing slide.
 - `assets/ibils-icon.svg` — the raw Ibils logo mark.
 
 ## Hard rules (never break)

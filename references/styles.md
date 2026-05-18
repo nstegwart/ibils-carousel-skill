@@ -150,11 +150,12 @@ For each slide build the prompt in this order:
     reference pose: <slide.pose>.`
 11. cover only: `This is a COVER — headline only, no body paragraph. Do NOT draw
     an empty text panel or placeholder card.`
-12. `Save it to: <NN>-<kind>.png`
-
-The CLOSING slide is never image-generated — `gen-carousel.js` copies the
-fixed `assets/closing-card.png` (Himel + phone + the real composited Ibils
-splash). Its logo can never be hallucinated.
+12. closing only: `CLOSING — render in the category style. Centre: an iPhone-
+    style phone mockup with a dynamic-island pill; inside the screen the iB
+    logo (last attached reference) + the word 'Ibils' below it. Himel beside
+    the phone. Leave the bottom ~170px EMPTY for composited badges — draw no
+    store badge yourself.`
+13. `Save it to: <NN>-<kind>.png`
 
 ## Pose discipline
 
@@ -168,5 +169,5 @@ carousel. Himel stays the identical B&W manga character — only the pose change
 
 Run `node scripts/finalize.js <slides-dir>`. It pads every slide to an exact
 1080x1350 4:5 frame (no crop) and composites the fixed glass-card logo into the
-TOP-RIGHT corner — pixel-identical branding across the whole carousel. The
-closing slide is left as-is (it is already the finished fixed card).
+TOP-RIGHT corner. On the closing slide it also composites the Play Store / App
+Store badges along the bottom strip — guaranteed position and styling.

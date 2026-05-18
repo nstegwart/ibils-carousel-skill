@@ -21,6 +21,7 @@ import { promisify } from "node:util";
 const execFileP = promisify(execFile);
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const LOGO_CARD = path.join(HERE, "..", "assets", "ibils-logo-card.png");
+const STORE_BADGES = path.join(HERE, "..", "assets", "store-badges.png");
 
 const DIR = process.argv[2];
 if (!DIR) {
@@ -65,17 +66,21 @@ async function main() {
   let ok = 0;
   for (const name of entries) {
     const file = path.join(DIR, name);
-    // the closing slide is the pre-built fixed brand card — already 1080x1350
-    // with its own composed logo; never normalise or re-stamp it.
-    if (name.includes("closing")) {
-      ok++;
-      console.log(`${name}: closing card (left as-is)`);
-      continue;
-    }
     try {
       await finalizeOne(file);
+      // closing slide: stamp the real store badges along the reserved bottom
+      // strip — guaranteed correct position and styling, never hallucinated.
+      if (name.includes("closing")) {
+        await execFileP("magick", [
+          file, STORE_BADGES,
+          "-gravity", "south", "-geometry", "+0+72", "-composite",
+          file
+        ]);
+        console.log(`${name}: 1080x1350 + logo + store badges`);
+      } else {
+        console.log(`${name}: 1080x1350 + logo`);
+      }
       ok++;
-      console.log(`${name}: 1080x1350 + logo`);
     } catch (e) {
       console.error(`${name}: FAILED — ${e.message}`);
     }

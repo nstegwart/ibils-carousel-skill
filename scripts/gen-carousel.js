@@ -30,9 +30,6 @@ const HIMEL_REFS = ["hero", "explain", "invite", "alert"].map((p) =>
   path.join(ASSETS, `himel-pose-${p}.png`)
 );
 const LOGO_REF = path.join(ASSETS, "ibils-icon.svg");
-// the closing slide is a FIXED pre-built brand card — never image-generated,
-// so its Ibils logo is the real composited mark and can never be hallucinated.
-const CLOSING_CARD = path.join(ASSETS, "closing-card.png");
 
 const PLAN_PATH = process.argv[2];
 if (!PLAN_PATH || !process.argv[3]) {
@@ -167,13 +164,17 @@ function buildPrompt(slide, plan, total) {
   }
   if (slide.kind === "closing") {
     lines.push(
-      "CLOSING LAYOUT — Himel beside a clean phone mockup in the centre. INSIDE",
-      "the phone screen draw the Ibils app splash: a deep Ibils-green screen",
-      "(#0E3B33), a small dynamic-island pill at top, and centred — the Ibils",
-      "logo (the iB hexagon monogram, the LAST attached reference image, in",
-      "white), the word 'Ibils' bold white below it, and a faint small tagline",
-      "'Atur uang harianmu'. Do NOT invent a different logo (no leaf, no other",
-      "mark). Below the phone place 'Google Play' and 'App Store' badges."
+      "CLOSING SLIDE — render it in the SAME category visual style as the other",
+      "slides (this carousel's style). Centre: an iPhone-style phone mockup — a",
+      "rounded dark phone body with a small dynamic-island pill near the top.",
+      "INSIDE the phone screen draw the Ibils app splash: a deep green screen,",
+      "the iB hexagon logo (the LAST attached reference image, in white) and the",
+      "word 'Ibils' in bold white directly BELOW the logo. Do NOT invent another",
+      "logo (no leaf, no other mark). A short closing headline above the phone;",
+      "Himel beside the phone in his pose.",
+      "IMPORTANT: leave the BOTTOM ~170px of the slide COMPLETELY EMPTY — the",
+      "download badges are composited there afterwards. Do NOT draw any store",
+      "badge, 'Google Play', or 'App Store' yourself."
     );
   }
   lines.push(
@@ -283,13 +284,6 @@ async function main() {
         }
       } catch {
         /* generate */
-      }
-      // closing = fixed pre-built brand card, copied not generated
-      if (slide.kind === "closing") {
-        await fs.copyFile(CLOSING_CARD, out);
-        ok++;
-        console.log(`${slide.name}: closing card (fixed asset)`);
-        continue;
       }
       let done = false;
       for (let attempt = 1; attempt <= 4 && !done; attempt++) {
