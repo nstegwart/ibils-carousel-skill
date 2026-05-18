@@ -8,7 +8,7 @@
  *   2. Composite the fixed Ibils glass-card logo into the top-RIGHT corner —
  *      pixel-identical branding on every slide.
  *
- * Requires ImageMagick (`magick`) on PATH.
+ * Requires ImageMagick — works with v7 (`magick`) or v6 (`convert`/`identify`).
  *
  * Usage: node finalize.js <slides-dir>
  */
@@ -20,6 +20,28 @@ import { promisify } from "node:util";
 
 const execFileP = promisify(execFile);
 const HERE = path.dirname(fileURLToPath(import.meta.url));
+
+// ImageMagick 7 has `magick`; v6 (e.g. on the burst server) has `convert` +
+// `identify`. Resolve once so finalize runs on either.
+let HAS_MAGICK = false;
+try {
+  await execFileP("magick", ["-version"]);
+  HAS_MAGICK = true;
+} catch {
+  /* fall back to v6 */
+}
+// run a convert-style transform
+function convert(args) {
+  return HAS_MAGICK
+    ? execFileP("magick", args)
+    : execFileP("convert", args);
+}
+// run an identify query
+function identify(args) {
+  return HAS_MAGICK
+    ? execFileP("magick", ["identify", ...args])
+    : execFileP("identify", args);
+}
 const LOGO_CARD = path.join(HERE, "..", "assets", "ibils-logo-card.png");
 const STORE_BADGES = path.join(HERE, "..", "assets", "store-badges.png");
 const CLOSING_PHONE = path.join(HERE, "..", "assets", "closing-phone.png");
@@ -31,16 +53,16 @@ if (!DIR) {
 }
 
 async function finalizeOne(file) {
-  const id = await execFileP("magick", ["identify", "-format", "%w %h", file]);
+  const id = await identify(["-format", "%w %h", file]);
   const [w, h] = id.stdout.trim().split(/\s+/).map(Number);
   if (!w || !h) throw new Error(`cannot read size: ${file}`);
   // smallest 4:5 box that CONTAINS the image — pad, do not crop
   const boxW = Math.max(w, Math.round(h * 0.8));
   const boxH = Math.max(h, Math.round(w / 0.8));
   const corner = (
-    await execFileP("magick", [file, "-format", "%[pixel:p{4,4}]", "info:"])
+    await identify(["-format", "%[pixel:p{4,4}]", file])
   ).stdout.trim();
-  await execFileP("magick", [
+  await convert([
     file,
     "-background", corner || "white",
     "-gravity", "center",
@@ -49,7 +71,7 @@ async function finalizeOne(file) {
     file
   ]);
   // glass-card logo — always top-RIGHT corner, small
-  await execFileP("magick", [
+  await convert([
     file, LOGO_CARD,
     "-gravity", "northeast", "-geometry", "+46+46", "-composite",
     file
@@ -72,12 +94,12 @@ async function main() {
       // closing slide: composite the real iPhone-splash (real iB logo — never
       // hallucinated) and the store badges into the reserved zones.
       if (name.includes("closing")) {
-        await execFileP("magick", [
+        await convert([
           file, CLOSING_PHONE,
           "-gravity", "center", "-geometry", "+150+70", "-composite",
           file
         ]);
-        await execFileP("magick", [
+        await convert([
           file, STORE_BADGES,
           "-gravity", "south", "-geometry", "+0+74", "-composite",
           file
