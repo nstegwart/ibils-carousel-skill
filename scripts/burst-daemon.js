@@ -112,8 +112,8 @@ function genTopics(mode, n, used, account) {
       `Output EXACTLY ${n} topics, one per line, no numbering, no extra text.`
     ].join("\n");
     const child = spawn("codex", [
-      "exec", "-m", "gpt-5.5", "-c", 'model_reasoning_effort="xhigh"',
-      "-c", 'service_tier="fast"', "--dangerously-bypass-approvals-and-sandbox",
+      "exec", "-m", "gpt-5.5", "-c", 'model_reasoning_effort="medium"',
+      "--dangerously-bypass-approvals-and-sandbox",
       "--skip-git-repo-check", "-"
     ], { env: { ...process.env, NO_COLOR: "1", CODEX_HOME: home }, stdio: ["pipe", "pipe", "ignore"] });
     let buf = "";

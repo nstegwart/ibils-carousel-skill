@@ -79,7 +79,7 @@ function codex(promptText) {
       if (acc) await provisionCodexHome(home, acc);
       const args = [
         "exec", "-m", "gpt-5.5",
-        "-c", 'model_reasoning_effort="xhigh"', "-c", 'service_tier="fast"',
+        "-c", 'model_reasoning_effort="medium"',
         "--dangerously-bypass-approvals-and-sandbox", "--skip-git-repo-check",
         "-C", OUT, "-"
       ];
