@@ -268,6 +268,12 @@ function lintGate() {
   });
 }
 
+// pick a random usable account not already tried for the current slide
+async function pickAccount(exclude) {
+  const pool = (await listUsableAccounts()).filter((a) => !exclude.has(a.email));
+  return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+}
+
 async function main() {
   const plan = JSON.parse(await fs.readFile(PLAN_PATH, "utf8"));
   if (!Array.isArray(plan.slides) || !plan.slides.length) {
@@ -286,22 +292,15 @@ async function main() {
     s.name = `${String(i + 1).padStart(2, "0")}-${s.kind}`;
   });
 
-  // pick the starting account
-  let pool = await listUsableAccounts();
-  if (!pool.length) {
+  if (!(await listUsableAccounts()).length) {
     console.error("no usable codex account");
     process.exit(1);
   }
-  let account = WANT_ACCOUNT
-    ? pool.find((a) => a.email === WANT_ACCOUNT) || pool[0]
-    : pool[0];
   const homeBase = await fs.mkdtemp(path.join(os.tmpdir(), "ibils-carousel-"));
-  let home = path.join(homeBase, "h0");
-  await provisionCodexHome(home, account);
-  console.log(`carousel ${plan.mode}/${plan.topic || ""} — account ${account.email}`);
+  console.log(`carousel ${plan.mode}/${plan.topic || ""} — per-slide account rotation`);
 
-  let rotations = 0;
   let ok = 0;
+  let homeSeq = 0;
   try {
     for (const slide of plan.slides) {
       const out = path.join(OUT_DIR, `${slide.name}.png`);
@@ -314,28 +313,31 @@ async function main() {
       } catch {
         /* generate */
       }
+      // EACH slide draws a fresh account from the pool — every codex call is
+      // spread across all ~106 accounts so no single account is hammered to
+      // its rate limit. Up to 4 tries, a different account each time.
+      const triedThisSlide = new Set();
       let done = false;
       for (let attempt = 1; attempt <= 4 && !done; attempt++) {
+        const account = await pickAccount(triedThisSlide);
+        if (!account) {
+          console.log(`${slide.name}: no usable account left`);
+          break;
+        }
+        triedThisSlide.add(account.email);
+        const home = path.join(homeBase, `h${homeSeq++}`);
+        await provisionCodexHome(home, account);
         const r = await runCodex(slide, plan, total, home);
+        await fs.rm(home, { recursive: true, force: true }).catch(() => {});
         if (r.ok) {
           done = true;
           break;
         }
-        // rotate accounts when the current one is dead / rate-limited
-        if (r.accountDead && rotations < 12) {
+        if (r.accountDead) {
           await markExhausted(account.email);
-          pool = (await listUsableAccounts()).filter((a) => a.email !== account.email);
-          if (!pool.length) {
-            console.log(`${slide.name}: no usable account left`);
-            break;
-          }
-          account = pool[0];
-          rotations++;
-          home = path.join(homeBase, `h${rotations}`);
-          await provisionCodexHome(home, account);
-          console.log(`${slide.name}: account dead -> rotate to ${account.email}`);
+          console.log(`${slide.name}: ${account.email} rate-limited -> next account`);
         } else {
-          console.log(`${slide.name}: attempt ${attempt} failed`);
+          console.log(`${slide.name}: attempt ${attempt} failed (${account.email})`);
         }
       }
       console.log(`${slide.name}: ${done ? "ok" : "FAILED"}`);
