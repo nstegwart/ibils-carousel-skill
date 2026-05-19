@@ -1,6 +1,6 @@
 ---
 name: ibils-carousel
-description: "Generate a finished Ibils Instagram carousel (cover + content + closing) where every slide is fully rendered by the codex native image tool — text, mascot and all. Use when the user asks to create Ibils finance content / carousel / slides, or to turn the latest finance news into a posting. Fetches live Indonesian finance news from valid sources, writes a sourced content plan, then generates and finalises uniform 1080x1350 slides. Four modes: news, education, marketing, insight."
+description: "Generate a finished Ibils Instagram carousel (cover + content + closing) where every slide is fully rendered by the codex native image tool — text, mascot and all. Use when the user asks to create Ibils finance content / carousel / slides, to turn the latest finance news into a posting, OR to regenerate / fix / correct one or more slides of a carousel that already exists. Fetches live Indonesian finance news from valid sources, writes a sourced content plan, then generates and finalises uniform 1080x1350 slides. Four modes: news, education, marketing, insight."
 ---
 
 # Ibils Carousel — full-bake content generator
@@ -18,6 +18,8 @@ the OpenAI Image API. No `OPENAI_API_KEY` is needed.
 - "Bikin konten / carousel Ibils soal <topik>"
 - "Jadiin berita keuangan terbaru jadi slide"
 - Any request to produce Ibils finance slides in one of the four modes.
+- "Regenerate / perbaiki / fix slide <N>" of a carousel that already exists —
+  bad image or wrong copy. → see "Regenerate a slide" below.
 
 ## When NOT to use
 
@@ -103,6 +105,31 @@ Open the finalised slides and check, slide by slide:
 Report: output path, slide count, and the cited sources. Flag any slide that
 fails so the user can regenerate just that one.
 
+## Regenerate a slide of an existing carousel
+
+Use this when the user already HAS a carousel (a folder holding `plan.json` +
+`slides/`) and wants slide(s) redrawn — bad image (broken anatomy, cropped
+mascot, garbled art) or wrong copy.
+
+1. Find the carousel folder. The user names it, or it is the most recent
+   `carousel-*` / `./carousels/<id>` directory. It MUST contain `plan.json`.
+   If the user points at a GCS content-id, download it once first:
+   `gsutil -m cp -r gs://<bucket>/<content-id> ./carousels/` — then work locally.
+2. If the COPY is wrong: open `plan.json`, find the slide, fix the text inside
+   its `brief` (the `HEADLINE` / `BODY` parts) to exactly what the user wants.
+   Image-only problem (copy already correct) → skip this step.
+3. Regenerate ONLY the affected slide(s):
+   `node ~/.codex/skills/ibils-carousel/scripts/regen.js <dir> --slide <N> --no-upload`
+   - `--slide` accepts a number (`3`), a kind (`cover` / `closing`) or a name
+     (`03-statement`); comma-separate or repeat for several.
+   - `--no-upload` keeps it fully local — no GCS. Drop it (and supply `$GCS_KEY`)
+     only when the user explicitly wants the fix pushed to GCS.
+   regen re-renders just those slides; the rest of the carousel is untouched.
+4. Open the regenerated slide and verify: correct anatomy (two arms/hands),
+   nothing cropped, text crisp and correctly spelled, exactly 1080x1350. Still
+   wrong → run step 3 again (each regen is a fresh roll).
+5. Report which slide(s) changed and the folder path.
+
 ## Bundle
 
 - `scripts/news.js` — zero-dependency live finance-news fetcher (RSS).
@@ -114,6 +141,8 @@ fails so the user can regenerate just that one.
   references attached); runs the linter as a hard gate, rotates accounts on
   death; reads `plan.json`, writes raw slides.
 - `scripts/finalize.js` — normalises slides to 1080x1350 + composites the logo.
+- `scripts/regen.js` — regenerate / fix a carousel; `--slide` for one slide,
+  `--no-upload` to stay fully local.
 - `references/content-rules.md` — the content "tata bahasa" (non-negotiable).
 - `references/styles.md` — the 4 visual styles + fixed image-prompt blocks.
 - `references/ibils-app.md` — the real Ibils app features + the no-fake-UI
