@@ -202,9 +202,13 @@ function buildPrompt(slide, plan, total) {
       "cape toward the centre or right — that whole area is reserved for a phone",
       "composited later and any limb there will be covered.",
       "DO NOT draw a phone, a phone mockup, a logo, the iB mark, the word",
-      "'Ibils', or any store badge. The centre / centre-right and the bottom",
-      "~190px MUST stay plain empty background. If you draw a phone or logo, let",
-      "the headline leave the top band, or let Himel cross into the centre, the",
+      "'Ibils', or any store badge. DO NOT draw any card, panel, box, banner,",
+      "button, or CTA strip ANYWHERE — especially not in the bottom third.",
+      "The centre / centre-right and the WHOLE bottom third (below Himel's",
+      "head height) MUST stay plain, EMPTY, textured background — nothing is",
+      "drawn there, no card behind anything; a phone and the store badges are",
+      "composited on later. If you draw a phone, a logo, a card/panel, let the",
+      "headline leave the top band, or let Himel cross into the centre, the",
       "slide is rejected."
     );
   }

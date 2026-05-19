@@ -120,10 +120,12 @@ async function main() {
         const bg = (
           await identify(["-format", "%[pixel:p{1074,700}]", file])
         ).stdout.trim();
+        // erase any card / panel / CTA box codex drew in the bottom band —
+        // right of Himel (he sits bottom-left), above the footer line.
         await convert([
           file,
           "-fill", bg || "black",
-          "-draw", "rectangle 318,1090 1086,1292",
+          "-draw", "rectangle 390,1040 1080,1296",
           file
         ]);
         await convert([
@@ -131,9 +133,11 @@ async function main() {
           "-gravity", "center", "-geometry", "+150+70", "-composite",
           file
         ]);
+        // store badges — small, composited from the hi-res official asset
+        // (downscaled = crisp), sitting on the plain bg, no card behind.
         await convert([
-          file, STORE_BADGES,
-          "-gravity", "south", "-geometry", "+150+100", "-composite",
+          file, "(", STORE_BADGES, "-resize", "480x", ")",
+          "-gravity", "south", "-geometry", "+100+95", "-composite",
           file
         ]);
         console.log(`${name}: 1080x1350 + logo + phone + store badges`);
