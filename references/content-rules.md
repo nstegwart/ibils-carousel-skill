@@ -70,91 +70,104 @@ list of petty one-off budget items.
 - Every content slide explains the mechanism, then gives a concrete way to
   apply it — a number, a rule, or a model the reader runs on their own money.
 
-## 4. Copy conventions ("tata bahasa") — CONCRETE, NEVER VAGUE
+## 4. Copy — VOICE, HOOK, and ARGUMENT
 
-### Every carousel must be WORTH a follower's time
+The copy must read like a sharp Indonesian personal-finance creator talking
+straight to a friend — NEVER like a report or a label. This is the #1 thing
+that makes content good. Match this voice exactly.
 
-"Not vague" is not enough — content can be concrete and still worthless. Every
-carousel must first clear this bar; one that fails it is rejected:
+### 4.1 VOICE — ngomong, jangan nulis laporan
 
-- **Relatable** — it speaks to a real, common money situation an ordinary
-  Indonesian lives: gajian & akhir bulan, gaji pas-pasan/UMR, THR, anak kos,
-  cicilan motor/HP, belanja bulanan, pinjol, BPJS, biaya nikah, nabung, dana
-  darurat. The reader must feel *"ini soal uangku"*. Never a niche one-off
-  ("anggaran alat tulis anak", "dana servis sepeda anak").
-- **One real lesson** — it teaches ONE money idea the reader probably has not
-  fully thought through and explains WHY it works. Advice everyone already
-  knows ("catat pengeluaranmu", "kurangi jajan") is not a lesson.
+- Spoken, casual Bahasa Indonesia. Address the reader as **"kamu"**. Everyday
+  words: "nggak", "kalo", "doang", "banget", "puter otak", "napas nggak?".
+- Short, punchy sentences. Confident and a little blunt. It is GOOD to be
+  confrontational and call out the reader's bad habit directly.
+- Honest emotional stakes are REQUIRED, not banned: real fear (miskin, kena
+  PHK, kemakan inflasi, beban utang numpuk), self-call-out (cuma ngira-ngira,
+  victim mentality), aspiration (naik level, pensiun tenang). The stakes must
+  be TRUE — no fake/exaggerated doom — but copy must never be flat and
+  emotionless.
+- A few key words in ALL-CAPS for punch: STOP, NGGAK AKAN, LANGSUNG, FIX.
+- A real internal-monologue quote lands hard — open a slide with one, then
+  break it down: *"Ya wajar gue miskin, gue kan nggak punya privilege."*
+- English finance terms are fine when natural (cashflow, side hustle, compound
+  interest, frugal living, outstanding) — but explain each in plain Indonesian
+  the first time it appears.
+
+### 4.2 HOOK — every headline provokes, never labels
+
+The cover AND every content headline must make a scrolling thumb STOP. A
+headline is one of: a blunt command, a warning, a myth it kills, a
+scary/surprising number, or a question that hits a real fear. NEVER a flat
+descriptive label.
+
+| weak — a label (REJECTED) | strong — a hook |
+|---|---|
+| "Budget pakaian kerja tahunan" | "GAJI UMR: FIX BAKAL MISKIN?" |
+| "Strategi menyimpan dana darurat" | "NABUNG DOANG NGGAK BIKIN KAYA" |
+| "Mengatur pengeluaran bulanan" | "STOP FRUGAL LIVING" |
+| "Pentingnya mencatat keuangan" | "NGAKU 'MASIH AMAN' PADAHAL CUMA NGIRA-NGIRA" |
+| "Utang pinjol meningkat" | "PINJOL INDONESIA TEMBUS RP101 TRILIUN" |
+
+Cover = the single sharpest hook, one line. Content headlines keep provoking.
+
+### 4.3 ARGUMENT — a carousel is ONE story, not loose facts
+
+A carousel builds ONE argument across its slides. Each slide is a beat that
+flows into the next — never isolated factoids.
+
+- Arc: HOOK → the problem / why it hurts → WHY it happens (the mechanism —
+  name the concept) → what to DO → a concrete framework or steps.
+- A content slide may end on a question the NEXT slide answers
+  (*"...terus uangnya ditaruh di mana?"*).
+- `news` arc: the shocking number → "apa artinya buat dompet kamu" → "apa itu
+  <jargon>" (explain every term plainly: outstanding, TWP90, inflasi) → deeper
+  data → what the reader should check before acting.
+- `education`: anchor the lesson in a named finance book's real idea (§3).
+
+### 4.4 Every carousel must be WORTH a follow
+
+- **Relatable** — a real, common money situation: gajian & akhir bulan, gaji
+  UMR, anak kos, cicilan, pinjol, THR, nabung, dana darurat. Reader feels
+  *"ini soal uangku"*. Never a niche one-off ("anggaran alat tulis anak").
+- **One real lesson + its WHY** — teaches something the reader has not fully
+  thought through; give the mechanism and a number, not just "catat
+  pengeluaranmu".
 - **Clear takeaway** — after the last slide the reader can name one specific
-  thing they now understand or will do, with a number or rule attached.
-- **Hook cover** — the cover states a real tension or a concrete, slightly
-  counterintuitive truth that stops the scroll, not a flat label.
-  - weak: "Budget pakaian kerja tahunan"
-  - strong: "Gaji naik tapi saldo akhir bulan tetap nol — ini sebabnya"
+  thing to do, with a number or rule.
 
-Whole-plan self-test: *"Would a real person screenshot this or send it to a
-friend?"* If not, the angle is too thin — choose a better one.
+Whole-plan test: *"Would a real person screenshot this or send it to a
+friend?"* If not, the angle is too thin — pick a better one.
 
-### Writing formula — fill it, do not freestyle
+### 4.5 Body copy — concrete, never vague
 
-For every CONTENT slide, write to this formula instead of "trying not to be
-vague":
+- Body = 1-3 short conversational sentences. It must ADD new concrete info the
+  headline does not say: a real action, a number/timeframe, a named example,
+  or an explained mechanism. Never restate the headline.
+- Pseudo-concrete test: if a stranger reads ONLY the body and cannot say the
+  exact thing to do, it FAILS.
 
-- **Headline** = one specific claim or instruction, complete on its own.
-- **Body** = `[a concrete action verb OR a why]` + `[the specific thing]` +
-  `[when / how much / which]`. The body must give the reader something to DO
-  (catat, sisihkan, cek, pindahkan, pilih, bandingkan, hentikan…) OR explain a
-  cause ("karena…", "saat…", "supaya…"). It must contain at least one of:
-  a real instruction verb, a number/timeframe, or a cause/mechanism.
+| vague (NO) | concrete (YES) |
+|---|---|
+| "Mulai dari catatan kecil" | "Pas gajian, LANGSUNG potong 10% buat dana darurat" |
+| "Atur uang biar lebih tenang" | "Sisihkan 20% gaji ke tabungan sebelum dipakai apa pun" |
+| "Rencanakan makan dari agenda keluarga" | "Tulis menu 7 hari tiap Minggu, belanja sekali untuk daftar itu" |
 
-Self-test each slide: *"If I delete the headline, does the body still teach
-something on its own?"* If no → rewrite. The linter (`scripts/lint-plan.js`)
-enforces this mechanically; the formula is how you pass it on the first try.
-
-- Language: Bahasa Indonesia, natural and conversational — not stiff, not
-  machine-translated. Address the reader as "kamu".
-- Every slide makes ONE specific, concrete point the reader can picture or act
-  on. No abstract filler.
-- BANNED — vague abstractions with no concrete content:
-  - empty payoff phrases: "biar lebih tenang", "hidup lebih baik", "lebih
-    bijak", "supaya teratur" — say WHAT happens, with what, when.
-  - vague nouns: "catatan kecil", "langkah kecil", "hal-hal penting",
-    "sistem" — name the actual thing.
-  - teaser headlines that hide the point ("Ini rahasianya", "Yang perlu kamu
-    tahu"). The headline STATES the point.
-- Headline = a clear, complete claim or instruction — readable on its own.
-  Normal case in the plan (the design sets uppercase).
-- Body = 1-2 short sentences. HARD RULE: the body must add NEW concrete
-  information the headline does not already say — a specific action (with what
-  / when / how), a concrete example, a named item, a mechanism. The body must
-  NEVER just restate or rephrase the headline. If you delete the headline, the
-  body must still teach something on its own.
-  - restating (NO): headline "Langganan yang lupa dipakai" + body "Langganan
-    yang tak dibuka tetap menarik uangmu" — body says nothing new.
-  - adding (YES): headline "Langganan yang lupa dipakai" + body "Buka daftar
-    langganan di akun toko aplikasimu, berhentikan yang tak dipakai sebulan."
-- Concrete vs vague — fix every line to the right column:
-  | vague (NO) | concrete (YES) |
-  |---|---|
-  | "Mulai dari catatan kecil" | "Catat tiap pengeluaran di hari yang sama" |
-  | "Atur uang biar lebih tenang" | "Sisihkan 20% gaji ke tabungan saat gajian" |
-  | "Kenali uang masuk" | "Tulis semua sumber pemasukan bulananmu" |
-  | "Cek sebelum belanja" | "Sebelum checkout, cek sisa anggaran kategori itu" |
-  | "Rencanakan makan dari agenda keluarga" | "Tulis menu 7 hari tiap Minggu, belanja sekali untuk daftar itu" |
-- Pseudo-concrete test: a sentence can sound like an instruction yet still be
-  empty. If a stranger reads ONLY the body and cannot say the exact thing to
-  do, it FAILS — e.g. "Rencanakan makan dari agenda keluarga" names no real
-  action. Name the action, the thing, and the when/how-much.
-- No competitor brand names. No fear-mongering. No clickbait exaggeration.
-- Ibils is a budgeting app — never a bank, lender, or investment product.
+- No hallucinated numbers (§1). No competitor brand names. No clickbait that
+  the carousel does not deliver. Ibils is a budgeting app — never a bank,
+  lender, or investment product.
 
 ## 5. Carousel structure
 
 A carousel is exactly: 1 cover + N content slides + 1 closing slide.
 - Default N = 10 (12 slides total). The user may ask for fewer.
-- Cover: the hook headline — a clear, concrete statement. No body paragraph.
-- Content slides: one concrete point each. Vary the layout across them
-  (statement, list, one-big-number, numbered step) so the deck has rhythm.
+- Cover: the sharpest hook (§4.2) — one line, no body paragraph.
+- Content slides: each is one beat of the single argument (§4.3), flowing into
+  the next. Vary the layout (statement, list, one-big-number, numbered step)
+  so the deck has rhythm.
+- The LAST content slide ties the lesson to Ibils — the app helps the reader
+  actually do what the carousel taught (catat cashflow, lihat sisa anggaran,
+  pantau cicilan). Natural and soft, never a hard sell.
 - Closing: codex draws ONLY the category-styled background + a short CTA
   headline + Himel (left). It must NOT draw a phone, a logo, "Ibils", or store
   badges. `finalize.js` then composites the real iPhone-splash (iPhone mockup +
