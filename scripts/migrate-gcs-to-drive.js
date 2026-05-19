@@ -53,16 +53,22 @@ async function driveHas(id) {
 }
 
 async function migrateOne(bucket, id) {
-  const tmp = path.join(os.tmpdir(), `mig-${id}`);
-  await fs.rm(tmp, { recursive: true, force: true });
-  await fs.mkdir(tmp, { recursive: true });
+  // download into a parent dir; gsutil recreates the <id>/ folder inside it
+  const tmpParent = path.join(os.tmpdir(), `mig-${id}`);
+  await fs.rm(tmpParent, { recursive: true, force: true });
+  await fs.mkdir(tmpParent, { recursive: true });
   try {
-    await execFileP("gsutil", ["-m", "cp", "-r", `gs://${bucket}/${id}/*`, tmp], {
+    // ONE source — the folder, no wildcard. `gs://bucket/id/*` expands to many
+    // sources and gsutil then rejects the destination; copying the folder
+    // itself is unambiguous and always accepted.
+    await execFileP("gsutil", ["-m", "cp", "-r", `gs://${bucket}/${id}`, tmpParent], {
       env: gsEnv
     });
-    await execFileP(RCLONE, ["copy", tmp, `${REMOTE}:${id}`], { env: process.env });
+    await execFileP(RCLONE, ["copy", path.join(tmpParent, id), `${REMOTE}:${id}`], {
+      env: process.env
+    });
   } finally {
-    await fs.rm(tmp, { recursive: true, force: true });
+    await fs.rm(tmpParent, { recursive: true, force: true });
   }
 }
 
