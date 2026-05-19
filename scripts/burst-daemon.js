@@ -25,14 +25,15 @@ const WORKDIR = path.resolve(process.argv[2] || path.join(os.homedir(), "ibils-b
 const LEDGER = path.join(WORKDIR, "topics-ledger.jsonl");
 const STOP = path.join(WORKDIR, "STOP");
 
-// gen-carousel.js renders a carousel's ~16 slides IN PARALLEL, each on its
-// own account — one carousel engages ~16 accounts at once. 4x2=8 concurrent
-// carousels x ~16 => ~100-130 codex calls in flight: the whole ~106-account
-// pool working simultaneously without pinning/hammering any single account.
-// More concurrent carousels oversubscribe the pool; fewer leave it idle.
+// gen-carousel.js renders a carousel's ~16 slides IN PARALLEL across accounts.
+// SUSTAINABLE PACING: a carousel costs ~17 codex calls; the ~104-account pool
+// refills ~620 image-calls/hr => a ceiling of ~37 carousels/hr. 4x1=4
+// concurrent carousels demand ~510 calls/hr — below the refill rate — so the
+// pool never fully drains and the burst produces a steady ~25-30 carousels/hr
+// nonstop, instead of sawtoothing between a 1h spike and hours of stall.
 const BATCHES = 4;
-const SESSIONS_PER_BATCH = 2;
-const TOPUP_AT = 1;           // relaunch a batch when <=1 session remains
+const SESSIONS_PER_BATCH = 1;
+const TOPUP_AT = 0;           // relaunch a batch when its session finishes
 const MODES = ["news", "education", "marketing", "insight"];
 
 // what a good topic IS, per mode — keeps the burst off trivial niche topics
