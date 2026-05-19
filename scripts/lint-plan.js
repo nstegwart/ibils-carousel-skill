@@ -92,6 +92,17 @@ function lintSlide(slide, idx) {
   if (slide.kind !== "closing" && !headline) {
     fails.push("missing HEADLINE");
   }
+  // the closing headline is composited beside a phone — a long one wraps to a
+  // 2nd line and gets overlapped. Keep it to one tight line.
+  if (slide.kind === "closing" && headline) {
+    const words = headline.split(/\s+/).filter(Boolean);
+    if (headline.length > 16 || words.length > 2) {
+      fails.push(
+        `closing headline too long (${headline.length} chars, ${words.length} ` +
+          "words) — max 2 words / ~14 chars so it fits ONE line beside the phone"
+      );
+    }
+  }
   for (const p of BANNED) {
     if (hay.includes(p)) fails.push(`banned vague phrase: "${p}"`);
   }

@@ -18,6 +18,10 @@ breaks any rule below is rejected.
 - The `topic` is only an angle — if it contains a number, IGNORE that number
   and use the real figure from the fetched news instead.
 - Never invent a source, a publisher, a survey, or a quote.
+- Spell every institution, agency, brand, and person name FULLY and correctly —
+  "Kementerian Keuangan" or "Kemenkeu" (never a clipped "Kemenke"), "Bank
+  Indonesia" or "BI", the publisher exactly as the source writes it. A
+  truncated or misspelled name reads as careless and AI-generated.
 - If a referenced source (RSS feed, link) cannot be fetched: STOP. Report it.
   Offer manual mode. Do not generate from guesses.
 
@@ -225,6 +229,11 @@ A carousel is exactly: 1 cover + N content slides + 1 closing slide.
   the real iB logo + "Ibils") and the Play Store / App Store badges into the
   reserved zones — so the logo is always the real mark, never hallucinated.
   Give the closing a `brief` (a short CTA headline) and a `pose`.
+- CLOSING HEADLINE LENGTH — the closing CTA headline must be ULTRA-short: at
+  most 2 words / ~14 characters, so it renders on ONE line in the top band
+  (e.g. "MULAI SEKARANG", "CEK CASHFLOW", "AYO CATAT"). A longer closing
+  headline wraps to a second line and gets overlapped by the phone composited
+  over the centre — keep it to one tight line.
 
 ## 6. Plan shape
 

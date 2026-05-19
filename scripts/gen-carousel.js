@@ -173,8 +173,13 @@ function buildPrompt(slide, plan, total) {
   if (slide.kind === "closing") {
     lines.push(
       "CLOSING SLIDE — render it in the SAME category visual style as the other",
-      "slides (this carousel's style). Draw ONLY: a short closing headline kept",
-      "entirely within the TOP ~230px band, and Himel at the BOTTOM-LEFT.",
+      "slides (this carousel's style). Draw ONLY: a short closing headline and",
+      "Himel at the BOTTOM-LEFT.",
+      "CLOSING HEADLINE — ONE single line of large type, kept entirely inside",
+      "the TOP ~210px band. It must NOT wrap to a second line: if the words do",
+      "not fit on one line, set the type smaller — never stack two lines. The",
+      "area below the headline band is reserved for a phone composited later; a",
+      "second headline line will be overlapped and the slide is rejected.",
       "HIMEL POSE for the closing: a friendly SELF-CONTAINED pose inside the",
       "left third of the slide — standing, or a small wave with one hand kept",
       "close to his body. He must NOT reach, point, lean, or extend any arm/leg/",
