@@ -10,7 +10,9 @@
  *
  * Requires ImageMagick — works with v7 (`magick`) or v6 (`convert`/`identify`).
  *
- * Usage: node finalize.js <slides-dir>
+ * Usage: node finalize.js <slides-dir> [--only <name[,name]>]
+ *   --only   finalise just these slides (e.g. 03-statement) — used by a
+ *            single-slide regen so finished slides are not double-processed.
  */
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -47,10 +49,20 @@ const STORE_BADGES = path.join(HERE, "..", "assets", "store-badges.png");
 const CLOSING_PHONE = path.join(HERE, "..", "assets", "closing-phone.png");
 
 const DIR = process.argv[2];
-if (!DIR) {
-  console.error("usage: node finalize.js <slides-dir>");
+if (!DIR || DIR.startsWith("--")) {
+  console.error("usage: node finalize.js <slides-dir> [--only <name[,name]>]");
   process.exit(1);
 }
+// --only: restrict to these slide names. Re-running finalize on an already
+// finalised slide would stack a 2nd logo — so a single-slide regen passes
+// --only to touch ONLY the freshly rendered slide.
+const ONLY = (() => {
+  const v = [];
+  process.argv.forEach((a, i) => {
+    if (a === "--only" && process.argv[i + 1]) v.push(...process.argv[i + 1].split(","));
+  });
+  return v.map((s) => s.trim().replace(/\.png$/i, "")).filter(Boolean);
+})();
 
 async function finalizeOne(file) {
   const id = await identify(["-format", "%w %h", file]);
@@ -79,9 +91,16 @@ async function finalizeOne(file) {
 }
 
 async function main() {
-  const entries = (await fs.readdir(DIR))
+  let entries = (await fs.readdir(DIR))
     .filter((f) => f.toLowerCase().endsWith(".png"))
     .sort();
+  if (ONLY.length) {
+    entries = entries.filter((f) => ONLY.includes(f.replace(/\.png$/i, "")));
+    if (!entries.length) {
+      console.error(`no PNG matches --only ${ONLY.join(",")} in ${DIR}`);
+      process.exit(1);
+    }
+  }
   if (!entries.length) {
     console.error(`no PNG slides in ${DIR}`);
     process.exit(1);
