@@ -177,14 +177,32 @@ async function lintRun() {
     .catch((e) => ({ ok: false, report: `${e.stdout || ""}${e.stderr || ""}`.trim() }));
 }
 
+// AI critic — second-pass copy review by a codex copy editor. Catches dumb /
+// awkward / AI-feeling Indonesian that no static banlist can predict.
+// Exit codes: 0 = clean, 1 = FAIL (rewrite), 2 = critic itself errored
+// (soft-pass to avoid stalling a whole carousel; lint already gated).
+async function criticRun() {
+  const planPath = path.join(OUT, "plan.json");
+  return execFileP("node", [path.join(HERE, "critic-plan.js"), planPath], { cwd: OUT })
+    .then((r) => ({ ok: true, report: r.stdout, soft: false }))
+    .catch((e) => {
+      const code = e.code ?? 1;
+      const report = `${e.stdout || ""}${e.stderr || ""}`.trim();
+      // exit 2 = critic itself errored — treat as soft-pass, do not block.
+      if (code === 2) return { ok: true, report, soft: true };
+      return { ok: false, report };
+    });
+}
+
 // hand codex the exact linter failures and fix ONLY the flagged slides —
 // the 11 good slides of a 12-slide plan are kept, not thrown away.
 async function fixPlan(report, articles) {
   const planPath = path.join(OUT, "plan.json");
   const prompt = [
-    "The carousel plan.json failed the copy linter. Fix ONLY the flagged slides.",
+    "The carousel plan.json failed a quality gate. Fix ONLY the flagged slides.",
     "Keep every other slide byte-identical — do NOT renumber, add, or drop slides.",
-    "Linter report (each FAIL block names a slide index and the problem):",
+    "Quality report (each FAIL block names a slide index and the problem;",
+    "lines from the copy critic also name the exact phrase and a fix suggestion):",
     report,
     "Rewrite rules for the flagged slides:",
     "- A content BODY must add NEW concrete info: a real action to take, a",
@@ -230,24 +248,40 @@ async function main() {
   }
   if (!plan) throw new Error("plan write failed");
 
-  // 2b. copy-quality gate — targeted rewrites of only the flagged slides
-  let lintOk = false;
-  for (let attempt = 1; attempt <= 4; attempt++) {
-    const lint = await lintRun();
-    if (lint.ok) {
-      lintOk = true;
-      break;
-    }
-    if (attempt === 4) break;
-    await fixPlan(lint.report, articles);
+  // 2b. copy-quality gate — TWO layers:
+  //   (a) mechanical lint  — banlist phrases, deck-level repeats, etc.
+  //   (b) AI critic        — codex copy editor catches awkward / AI-feeling
+  //                          Indonesian no banlist can predict.
+  // Both must pass. fixPlan rewrites only the flagged slides.
+  const reloadPlan = async () => {
     try {
       const p = JSON.parse(await fs.readFile(path.join(OUT, "plan.json"), "utf8"));
       if (Array.isArray(p.slides) && p.slides.length >= 6) plan = p;
     } catch {
-      /* a broken rewrite will be caught by the next lint pass */
+      /* a broken rewrite will surface in the next gate pass */
     }
+  };
+  let gateOk = false;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    // (a) mechanical lint
+    const lint = await lintRun();
+    if (!lint.ok) {
+      if (attempt === 4) break;
+      await fixPlan(lint.report, articles);
+      await reloadPlan();
+      continue;
+    }
+    // (b) AI critic — only meaningful once lint already passes
+    const critic = await criticRun();
+    if (critic.ok) {
+      gateOk = true;
+      break;
+    }
+    if (attempt === 4) break;
+    await fixPlan(critic.report, articles);
+    await reloadPlan();
   }
-  if (!lintOk) throw new Error("plan failed the copy linter");
+  if (!gateOk) throw new Error("plan failed the copy quality gates (lint + critic)");
 
   // 3. generate + finalise
   const genArgs = [path.join(OUT, "plan.json"), path.join(OUT, "slides")];
